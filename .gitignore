@@ -1,0 +1,3 @@
+#test and a.out files no no
+*.exe*
+a.out
