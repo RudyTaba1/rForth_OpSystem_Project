@@ -1,6 +1,8 @@
 #test and a.out files no no
 *.exe*
 a.out
+#this is a user-dependent file
+.gitattributes
 #ignore dir
 */build/*
 /cry/*
