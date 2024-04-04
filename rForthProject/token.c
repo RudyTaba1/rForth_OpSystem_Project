@@ -1,0 +1,179 @@
+#include<ctype.h>
+#include"token.h"
+#include"int_stack.c"
+//comment test
+/**
+ * method inputs a String and removes the spaces
+ * @return the token without spaces
+ * */
+char *SpacelessToken(char *input){
+ 	//initialized token
+	char *token;
+	//removes the spaces from the token
+	token = strtok(input," ");
+	return token;
+ }//SpacelessToken()
+
+/**
+ * @returns type of token stored*/
+char *toString(enum token_type_t TokenType){
+	//switch will be easiest for this (God bless C)
+	switch(TokenType){
+		case NUMS:
+		return "Numbers";
+		case AR_OP:
+		return "Arithmetic Operations";
+		case SYM:
+		return "Symboles";
+		case WORDS:
+		return "Words";
+	default:
+		return " ";
+	}
+ }//toString() method
+
+
+/**
+ * method parses the token and returns the type of token.
+ * @return @param parsedToken.
+*/
+TOKEN parseToken(char *token){
+
+   TOKEN parsedToken;
+//checks if token is any of the structures
+       if(isdigit(*token)){
+       parsedToken.TokenType = NUMS;
+      }
+       else if(*token=='+'||*token=='-'||*token=='*'||*token=='/'){
+       	parsedToken.TokenType = AR_OP;
+       }
+       	else if(*token==';'||*token==':'){
+       	   parsedToken.TokenType = SYM;
+       }
+       else{
+	       parsedToken.TokenType = WORDS;
+       }
+	//assigns the token to the parsedToken
+   parsedToken.txt = token;
+//returns the parsedToken
+return parsedToken;       
+ }
+
+ /**
+  * 
+ */
+ void seperate_token(int_stack_t *stk, char *txt, char* sList[], int sListVal[]){
+	const char *space = " ";
+	char *token;
+	char *rest = txt;
+	int top_stk;
+	/*
+	this while loop will identify the operation via symbole and then do the operation*/
+	while ((token = strtok_r(rest, space &rest))){
+		token_type_t type = parseToken(token);
+		}
+		
+	if(type == NUMS){
+		int_stack_push(stk, atoi(token));
+	}
+
+		/*else if(type == AR_OP){
+			
+			//can't do ops without at least 2 numbers
+			if(stk->size > 1){
+				if(strcmp(token, "+")==0){
+					int_stack_add(stk);
+				}
+				else if(strcmp(token, "-")==0){
+					int_stack_sub(stk);
+				}
+				else if(strcmp(token, "*")==0){
+					int_stack_mul(stk);
+				}
+				else if(strcmp(token, "/")==0){
+					int_stack_div(stk);
+				}
+				else if(strcmp(token, "mod")==0){
+					int_stack_mod(stk);
+				}
+				else if(strcmp(token, ".")==0){
+					int_stack_pop(stk, &top_stk);
+				}
+
+				else{
+					printf("Invalid operation\n");
+				}
+			}
+		}*/
+		if(stk->size > 1){
+		switch(type == AR_OP){
+			case '+':
+				int_stack_add(stk);
+				break;
+			case '-':
+				int_stack_sub(stk);
+				break;
+			case '*':
+				int_stack_mul(stk);
+				break;
+			case '/':
+				int_stack_div(stk);
+				break;
+			case 'mod':
+				int_stack_mod(stk);
+				break;
+			case '.':
+				int_stack_pop(stk, &top_stk);
+				break;
+			default:
+				printf("Stack Underflow\n");
+				int_stack_pop(stk, &top_stk);
+		}
+	}
+		switch(type == WORDS){
+			case "dup":
+				int_stack_dup(stk);
+				break;
+			case "drop":
+				int_stack_drop(stk);
+				break;
+			case "swap":
+				int_stack_swap(stk);
+				break;
+			case "over":
+				int_stack_over(stk);
+				break;
+			case "rot":
+				int_stack_rot(stk);
+				break;
+			case "var":
+			token = strtok_r(NULL, space, &rest);
+				if(token != NULL){
+					for(int i = 0; i < 10; i++){
+						if(sList[i] == NULL){
+							sList[i] = strdup(token);
+							sListVal[i] = 0; 
+							break;
+						}
+					}
+				}else{
+					for(int i = 0; i<10; i++){
+						if(sList[i] != NULL && strcmp(sList[i], token) == 0){
+							int_stack_push(stk, sListVal[i]);
+							break;
+
+						}
+					
+					}
+				}
+
+			default:
+				printf("Stack Underflow\n");
+				int_stack_pop(stk, &top_stk);
+		}
+		if(type==BOOLEAN){
+			int_bool_integration(stk);
+		}
+
+ }
+
