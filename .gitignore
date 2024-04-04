@@ -6,3 +6,4 @@ a.out
 #ignore dir
 */build/*
 /cry/*
+/.vscode/*
