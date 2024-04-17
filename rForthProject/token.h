@@ -30,5 +30,8 @@ char *SpacelessToken(char *input);
 //Parses the token. In other words, checks structure of Token
 TOKEN parseToken(char *token);
 
+//seperates the token
+
+
 #endif
   //token.h

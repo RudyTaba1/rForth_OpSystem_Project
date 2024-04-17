@@ -4,6 +4,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <sys/queue.h>
 
 void int_stack_init(int_stack_t *stk, int capacity) {
     SLIST_INIT(&stk->head);
@@ -19,7 +20,7 @@ int int_stack_push(int_stack_t *stk, int value) {
 
     int_entry_t *newEntry = malloc(sizeof(int_entry_t));
     if (newEntry) {
-        newEntry->value = value;
+        newEntry->value = value; 
         SLIST_INSERT_HEAD(&stk->head, newEntry, entries);
         stk->size++;
         return 1; //success
@@ -283,9 +284,9 @@ int int_stack_divmod(int_stack_t *stk){
     //push the quotient, return remainder
     int_stack_push(stk, quotient);
     return int_stack_push(stk, remainder);
+}
 
 
-    }
 int int_bool_integration(int_stack_t *stk){
     int top_value, second_stack_value;
     char bool_op;

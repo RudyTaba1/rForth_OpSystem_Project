@@ -1,6 +1,6 @@
-#include<ctype.h>
-#include"token.h"
-#include"int_stack.c"
+#include <ctype.h>
+#include "token.h"
+#include "int_stack.c"
 //comment test
 /**
  * method inputs a String and removes the spaces
@@ -62,17 +62,18 @@ return parsedToken;
  /**
   * 
  */
- void seperate_token(int_stack_t *stk, char *txt, char* sList[], int sListVal[]){
+ void separate_token(int_stack_t *stk, char *txt, char* sList[], int sListVal[]){
 	const char *space = " ";
 	char *token;
 	char *rest = txt;
 	int top_stk;
 	/*
 	this while loop will identify the operation via symbole and then do the operation*/
-	while ((token = strtok_r(rest, space &rest))){
-		token_type_t type = parseToken(token);
-		}
+	while ((token = strtok_r(rest, space, &rest))){
+		enum token_type_t type = parseToken(token).TokenType;
 		
+		
+
 	if(type == NUMS){
 		int_stack_push(stk, atoi(token));
 	}
@@ -111,10 +112,10 @@ return parsedToken;
 				int_stack_add(stk);
 				break;
 			case '-':
-				int_stack_sub(stk);
+				int_stack_subtract(stk);
 				break;
 			case '*':
-				int_stack_mul(stk);
+				int_stack_mult(stk);
 				break;
 			case '/':
 				int_stack_div(stk);
@@ -131,22 +132,19 @@ return parsedToken;
 		}
 	}
 		switch(type == WORDS){
-			case "dup":
+			case'"dup':
 				int_stack_dup(stk);
 				break;
-			case "drop":
-				int_stack_drop(stk);
-				break;
-			case "swap":
+			case 'swap':
 				int_stack_swap(stk);
 				break;
-			case "over":
+			case 'over':
 				int_stack_over(stk);
 				break;
-			case "rot":
+			case 'rot':
 				int_stack_rot(stk);
 				break;
-			case "var":
+			case 'var':
 			token = strtok_r(NULL, space, &rest);
 				if(token != NULL){
 					for(int i = 0; i < 10; i++){
@@ -175,5 +173,6 @@ return parsedToken;
 			int_bool_integration(stk);
 		}
 
+ }
  }
 

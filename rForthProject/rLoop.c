@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include "token.c"
+#include "int_stack.h"
+
+
 int main(int argc, char *argv[]){
 
 printf("Welcome to rForth! Type 'bye' to exit. \n");
@@ -30,6 +33,23 @@ for(int i = 0; i<100; i++){
 /**
  * From here, I will attempt to build the for loop that houses the interpreter. I don't really know how to go about it, but I'll give it a shot.
 */
+while ((read = getline(&line, &len, stdin)) != -1) {
+        
+        if (line[read - 1] == '\n') {
+            line[read - 1] = '\0';
+        }
+        
+        if (strcmp(line, "bye") == 0) {
+            break;
+        }
 
+        separate_token(&stk, line, sList, sValues); 
+        int_stack_print(&stk, stdout);
+    }
+
+    
+
+    free(line);
+    return 0;
 
 }
