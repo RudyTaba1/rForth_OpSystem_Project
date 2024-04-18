@@ -11,7 +11,7 @@ enum token_type_t{
 	SYM,
 	WORDS,
 	BOOLEAN
-  };
+  }TOKEN_TYPE;
 
 //Token Structure
 typedef struct token_t{

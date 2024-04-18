@@ -84,16 +84,25 @@ int int_stack_add(int_stack_t *stk) {
 
 void int_stack_print(int_stack_t *stk, FILE *file) {
     int_entry_t *entry;
+    int elements[stk->size]; 
+    int i = 0;
     int pos = 0;
     if (stk->size == 0) {
-        fprintf(file, "empty stack\n");
+        //printf("empty stack\n");
     }
 
     SLIST_FOREACH(entry, &stk->head, entries) {
-        fprintf(file, "%d: %d\n", pos, entry->value);
-        pos++;
+        if (i < stk->size) { 
+            elements[i++] = entry->value;
+        }
     }
-    printf("\n");
+
+    
+    printf("Stack: ");
+    for (i = stk->size - 1; i >= 0; i--) {
+        printf("%d ", elements[i]);
+    }
+    printf("<- Top\n");
 }
 
 int int_stack_size(int_stack_t* stk) {

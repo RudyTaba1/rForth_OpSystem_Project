@@ -14,6 +14,13 @@ char *SpacelessToken(char *input){
 	return token;
  }//SpacelessToken()
 
+ token_t* intialize_token(token_type_t type, const char* text){
+    token_t* newToken = (token_t*)malloc(sizeof(token_t));
+    if (newToken == NULL) {
+       return NULL;
+    }
+}
+
 /**
  * @returns type of token stored*/
 char *toString(enum token_type_t TokenType){
@@ -41,15 +48,15 @@ TOKEN parseToken(char *token){
 
    TOKEN parsedToken;
 //checks if token is any of the structures
-       if(isdigit(*token)){
-       parsedToken.TokenType = NUMS;
-      }
-       else if(*token=='+'||*token=='-'||*token=='*'||*token=='/'){
+	if(*token=='+'||*token=='-'||*token=='*'||*token=='/'){
        	parsedToken.TokenType = AR_OP;
        }
        	else if(*token==';'||*token==':'){
        	   parsedToken.TokenType = SYM;
        }
+	   	else if(isdigit(*token)){
+	   	   parsedToken.TokenType = NUMS;
+	   }
        else{
 	       parsedToken.TokenType = WORDS;
        }
@@ -127,8 +134,9 @@ return parsedToken;
 				int_stack_pop(stk, &top_stk);
 				break;
 			default:
-				printf("Stack Underflow\n");
-				int_stack_pop(stk, &top_stk);
+				int_stack_push(stk, &top_stk);
+				//printf("Stack Underflow\n");
+				//int_stack_pop(stk, &top_stk);
 		}
 	}
 		switch(type == WORDS){
