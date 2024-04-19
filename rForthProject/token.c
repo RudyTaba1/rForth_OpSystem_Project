@@ -14,12 +14,7 @@ char *SpacelessToken(char *input){
 	return token;
  }//SpacelessToken()
 
- token_t* intialize_token(token_type_t type, const char* text){
-    token_t* newToken = (token_t*)malloc(sizeof(token_t));
-    if (newToken == NULL) {
-       return NULL;
-    }
-}
+
 
 /**
  * @returns type of token stored*/
@@ -69,13 +64,13 @@ return parsedToken;
  /**
   * 
  */
- void separate_token(int_stack_t *stk, char *txt, char* sList[], int sListVal[]){
+ /*void separate_token(int_stack_t *stk, char *txt, char* sList[], int sListVal[]){
 	const char *space = " ";
 	char *token;
 	char *rest = txt;
 	int top_stk;
-	/*
-	this while loop will identify the operation via symbole and then do the operation*/
+	
+	//this while loop will identify the operation via symbole and then do the operation
 	while ((token = strtok_r(rest, space, &rest))){
 		enum token_type_t type = parseToken(token).TokenType;
 		
@@ -85,34 +80,34 @@ return parsedToken;
 		int_stack_push(stk, atoi(token));
 	}
 
-		/*else if(type == AR_OP){
+//		else if(type == AR_OP){
 			
-			//can't do ops without at least 2 numbers
-			if(stk->size > 1){
-				if(strcmp(token, "+")==0){
-					int_stack_add(stk);
-				}
-				else if(strcmp(token, "-")==0){
-					int_stack_sub(stk);
-				}
-				else if(strcmp(token, "*")==0){
-					int_stack_mul(stk);
-				}
-				else if(strcmp(token, "/")==0){
-					int_stack_div(stk);
-				}
-				else if(strcmp(token, "mod")==0){
-					int_stack_mod(stk);
-				}
-				else if(strcmp(token, ".")==0){
-					int_stack_pop(stk, &top_stk);
-				}
-
-				else{
-					printf("Invalid operation\n");
-				}
-			}
-		}*/
+//			//can't do ops without at least 2 numbers
+//			if(stk->size > 1){
+//				if(strcmp(token, "+")==0){
+//					int_stack_add(stk);
+//				}
+//				else if(strcmp(token, "-")==0){
+//					int_stack_sub(stk);
+//				}
+//				else if(strcmp(token, "*")==0){
+//					int_stack_mul(stk);
+//				}
+//				else if(strcmp(token, "/")==0){
+//					int_stack_div(stk);
+//				}
+//				else if(strcmp(token, "mod")==0){
+//					int_stack_mod(stk);
+//				}
+//				else if(strcmp(token, ".")==0){
+//					int_stack_pop(stk, &top_stk);
+//				}
+//
+//				else{
+//					printf("Invalid operation\n");
+//				}
+//			}
+//		}
 		if(stk->size > 1){
 		switch(type == AR_OP){
 			case '+':
@@ -182,5 +177,101 @@ return parsedToken;
 		}
 
  }
- }
+ }*/
 
+/**
+ * rewrite of seperate token method.  Intended goal is to make the method load values onto the stack. For whatever reason, the previous method
+ * does not do that. rather, takes the value and reads it, and then does not add it. rather, analyzes it, and give a stack underflow message.
+ * 
+*/
+void separate_token(int_stack_t *stk, char *txt, char* sList[], int sListVal[]){
+	const char *space = " ";
+	char *token;
+	char *rest = txt;
+	int top_stk;
+	
+	//this while loop will identify the operation via symbole and then do the operation
+	while ((token = strtok_r(rest, space, &rest))){
+		enum token_type_t type = parseToken(token).TokenType;
+		
+		
+	//okay, now it works. 
+	if(type == NUMS){
+		int_stack_push(stk, atoi(token));
+		}
+	
+	while(stk->size>4 && token != NULL){
+		
+		switch(type){
+			case AR_OP:
+				if(strcmp(token, "+")==0){
+					int_stack_add(stk);
+				}
+				else if(strcmp(token, "-")==0){
+					int_stack_subtract(stk);
+				}
+				else if(strcmp(token, "*")==0){
+					int_stack_mult(stk);
+				}
+				else if(strcmp(token, "/")==0){
+					int_stack_div(stk);
+				}
+				else if(strcmp(token, "mod")==0){
+					int_stack_mod(stk);
+				}
+				else if(strcmp(token, ".")==0){
+					int_stack_pop(stk, &top_stk);
+				}
+				else{
+					printf("Invalid operation\n");
+				}
+				break;
+			case WORDS:
+				if(strcmp(token, "dup")==0){
+					int_stack_dup(stk);
+				}
+				else if(strcmp(token, "swap")==0){
+					int_stack_swap(stk);
+				}
+				else if(strcmp(token, "over")==0){
+					int_stack_over(stk);
+				}
+				else if(strcmp(token, "rot")==0){
+					int_stack_rot(stk);
+				}
+				else if(strcmp(token, "var")==0){
+					token = strtok_r(NULL, space, &rest);
+					if(token != NULL){
+						for(int i = 0; i < 10; i++){
+							if(sList[i] == NULL){
+								sList[i] = strdup(token);
+								sListVal[i] = 0; 
+								break;
+							}
+						}
+					}else{
+						for(int i = 0; i<10; i++){
+							if(sList[i] != NULL && strcmp(sList[i], token) == 0){
+								int_stack_push(stk, sListVal[i]);
+								break;
+
+							}
+					
+						}
+					}
+				}
+				else{
+					printf("Stack Underflow\n");
+					int_stack_pop(stk, &top_stk);
+				}
+				break;
+			case BOOLEAN:
+				int_bool_integration(stk);
+				break;
+			default:
+				printf("Stack Underflow\n");
+				int_stack_pop(stk, &top_stk);
+			}
+		}	
+	}
+}
