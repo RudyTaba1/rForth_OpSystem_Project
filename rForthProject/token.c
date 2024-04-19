@@ -14,7 +14,12 @@ char *SpacelessToken(char *input){
 	return token;
  }//SpacelessToken()
 
-
+ token_t* intialize_token(token_type_t type, const char* text){
+    token_t* newToken = (token_t*)malloc(sizeof(token_t));
+    if (newToken == NULL) {
+       return NULL;
+    }
+}
 
 /**
  * @returns type of token stored*/
@@ -73,12 +78,8 @@ return parsedToken;
 	//this while loop will identify the operation via symbole and then do the operation
 	while ((token = strtok_r(rest, space, &rest))){
 		enum token_type_t type = parseToken(token).TokenType;
-		
-		
-
-	if(type == NUMS){
 		int_stack_push(stk, atoi(token));
-	}
+	
 
 //		else if(type == AR_OP){
 			
