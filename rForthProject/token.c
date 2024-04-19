@@ -14,12 +14,6 @@ char *SpacelessToken(char *input){
 	return token;
  }//SpacelessToken()
 
- token_t* intialize_token(token_type_t type, const char* text){
-    token_t* newToken = (token_t*)malloc(sizeof(token_t));
-    if (newToken == NULL) {
-       return NULL;
-    }
-}
 
 /**
  * @returns type of token stored*/
