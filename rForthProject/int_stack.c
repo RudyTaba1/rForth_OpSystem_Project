@@ -73,13 +73,16 @@ int int_stack_swap(int_stack_t *stk) {
 /* Example of how to create a binary operator that works o top two elements (if present) */
 
 int int_stack_add(int_stack_t *stk) {
-    if (stk->size < 2)
+    if (stk->size < 2){
         return 0;
+    }
+    
     int top_value, next_to_top_value;
     int_stack_pop(stk, &top_value);
     int_stack_pop(stk, &next_to_top_value);
     int add = top_value + next_to_top_value;
     return int_stack_push(stk, add);
+    
 }
 
 void int_stack_print(int_stack_t *stk, FILE *file) {

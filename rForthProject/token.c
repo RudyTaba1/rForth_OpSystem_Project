@@ -184,20 +184,22 @@ void separate_token(int_stack_t *stk, char *txt, char* sList[], int sListVal[]){
 	char *token;
 	char *rest = txt;
 	int top_stk;
+	enum token_type_t TokenType;
 	
 	//this while loop will identify the operation via symbole and then do the operation
 	while ((token = strtok_r(rest, space, &rest))){
 		enum token_type_t type = parseToken(token).TokenType;
-		
+		TokenType = type;
 		
 	//okay, now it works. 
 	if(type == NUMS){
 		int_stack_push(stk, atoi(token));
 		}
 	
-	while(stk->size>4 && token != NULL){
+	
+	if(stk->size>1){
 		
-		switch(type){
+		switch(TokenType){
 			case AR_OP:
 				if(strcmp(token, "+")==0){
 					int_stack_add(stk);
@@ -264,8 +266,7 @@ void separate_token(int_stack_t *stk, char *txt, char* sList[], int sListVal[]){
 				int_bool_integration(stk);
 				break;
 			default:
-				printf("Stack Underflow\n");
-				int_stack_pop(stk, &top_stk);
+				break;
 			}
 		}	
 	}
