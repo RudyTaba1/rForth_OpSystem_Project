@@ -23,6 +23,7 @@ int int_stack_push(int_stack_t *stk, int value) {
         newEntry->value = value; 
         SLIST_INSERT_HEAD(&stk->head, newEntry, entries);
         stk->size++;
+        printf("%d ok\n", value);
         return 1; //success
     }
     return 0; // fail
@@ -299,35 +300,75 @@ int int_stack_divmod(int_stack_t *stk){
 }
 
 
-int int_bool_integration(int_stack_t *stk){
-    int top_value, second_stack_value;
-    char bool_op;
-    if(stk->size<2){
+int int_bool_and(int_stack_t *stk){
+    int top_value, second_val;
+    
         int_stack_pop(stk, &top_value);
-        int_stack_pop(stk, &second_stack_value);
-        int_stack_pop(stk, &bool_op);
-        if(bool_op == '&'){
-            return int_stack_push(stk, top_value && second_stack_value);
-            }
-        else if(bool_op == '|'){
-            return int_stack_push(stk, top_value || second_stack_value);
-            }
-        else if(bool_op == '!'){
-            return int_stack_push(stk, !top_value);
-            }
-        else if(bool_op == '<'){
-            return int_stack_push(stk, top_value < second_stack_value);
-            }
-        else if(bool_op == '>'){
-            return int_stack_push(stk, top_value > second_stack_value);
-            }
-        else if(bool_op == '='){
-            return int_stack_push(stk, top_value == second_stack_value);
-        }
-        else{
-            return EXIT_FAILURE;
-            }
-        }
+        int_stack_pop(stk, &second_val);
+        int and = top_value && second_val;
+    
+    return int_stack_push(stk, and);
     }
+
+int int_bool_less(int_stack_t *stk){
+    int top_value, second_val;
+    
+        int_stack_pop(stk, &top_value);
+        int_stack_pop(stk, &second_val);
+        int or = second_val < top_value;
+    
+    return int_stack_push(stk, or);
+    }
+
+
+int int_bool_greater(int_stack_t *stk){
+    int top_value, second_val;
+    
+        int_stack_pop(stk, &top_value);
+        int_stack_pop(stk, &second_val);
+        int greater = (second_val > top_value);
+    
+    return int_stack_push(stk, greater);
+    }
+
+
+int int_bool_equal(int_stack_t *stk){
+    int top_value, second_val;
+    
+        int_stack_pop(stk, &top_value);
+        int_stack_pop(stk, &second_val);
+        int equal = (second_val == top_value);
+    
+    return int_stack_push(stk, equal);
+}
+
+int int_bool_or(int_stack_t *stk){
+    int top_value, second_val;
+    
+        int_stack_pop(stk, &top_value);
+        int_stack_pop(stk, &second_val);
+        int or = (top_value || second_val);
+    
+    return int_stack_push(stk, or);
+}
+
+int int_bool_invert(int_stack_t *stk){
+    int top_val;
+    int invert;
+
+    int_stack_pop(stk, &top_val);
+    
+    if(top_val == 1){
+           invert = 0;
+    }
+    
+    if (top_val == 0){
+          invert = 1;
+     }
+       
+    return int_stack_push(stk, invert);
+
+}
+
 
 

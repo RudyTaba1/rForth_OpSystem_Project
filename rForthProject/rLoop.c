@@ -44,7 +44,7 @@ while ((read = getline(&line, &len, stdin)) != -1) {
         }
 
         separate_token(&stk, line, sList, sValues); 
-        int_stack_print(&stk, stdout);
+        
     }
 
     

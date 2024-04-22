@@ -10,7 +10,8 @@ enum token_type_t{
 	AR_OP,
 	SYM,
 	WORDS,
-	BOOLEAN
+	BOOLEAN,
+	LOOPS,
   }TOKEN_TYPE;
 
 //Token Structure
