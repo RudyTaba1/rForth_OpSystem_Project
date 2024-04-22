@@ -1,6 +1,7 @@
 #test and a.out files no no
 *.exe*
 a.out
+*.sh
 
 #this is a user-dependent file
 .gitattributes
