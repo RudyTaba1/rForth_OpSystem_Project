@@ -20,10 +20,11 @@ int int_stack_push(int_stack_t *stk, int value) {
 
     int_entry_t *newEntry = malloc(sizeof(int_entry_t));
     if (newEntry) {
+         printf("\t ok");
+         printf("\n");
         newEntry->value = value; 
         SLIST_INSERT_HEAD(&stk->head, newEntry, entries);
         stk->size++;
-        printf("%d ok\n", value);
         return 1; //success
     }
     return 0; // fail
