@@ -20,13 +20,13 @@ int int_stack_push(int_stack_t *stk, int value) {
 
     int_entry_t *newEntry = malloc(sizeof(int_entry_t));
     if (newEntry) {
-         printf("\t ok");
-         printf("\n");
-        newEntry->value = value; 
+        newEntry->value = value;
+        printf("\t ok");
+        printf("\n"); 
         SLIST_INSERT_HEAD(&stk->head, newEntry, entries);
         stk->size++;
         return 1; //success
-    }
+    }      
     return 0; // fail
 }
 
@@ -34,6 +34,7 @@ int int_stack_pop(int_stack_t *stk, int *top_value) {
     int_entry_t *entry = SLIST_FIRST(&stk->head);
     if (entry) {
         int value = entry->value;
+        printf("popped value: %d\n", value);
         SLIST_REMOVE_HEAD(&stk->head, entries);
         free(entry);
         stk->size--;
@@ -93,7 +94,7 @@ void int_stack_print(int_stack_t *stk, FILE *file) {
     int i = 0;
     int pos = 0;
     if (stk->size == 0) {
-        //printf("empty stack\n");
+        printf("empty stack\n");
     }
 
     SLIST_FOREACH(entry, &stk->head, entries) {
@@ -103,7 +104,7 @@ void int_stack_print(int_stack_t *stk, FILE *file) {
     }
 
     
-    printf("Stack: ");
+    printf("Stack [%d]: ", stk->size);
     for (i = stk->size - 1; i >= 0; i--) {
         printf("%d ", elements[i]);
     }

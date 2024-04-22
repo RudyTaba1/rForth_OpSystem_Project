@@ -89,7 +89,10 @@ void separate_token(int_stack_t *stk, char *txt, char* sList[], int sListVal[]){
 	if(type == NUMS){
 		int_stack_push(stk, atoi(token));
 		}
-	
+
+	if(stk->size==0 && *token == '.'){
+		int_stack_print(stk, stdout);
+	}	
 	
 	if(stk->size>0){
 		
