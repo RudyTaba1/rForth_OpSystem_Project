@@ -7,5 +7,6 @@ a.out
 
 #ignore dir
 build/*
+rForthProject/build/*
 /cry/*
 /.vscode/*
