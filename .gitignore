@@ -6,6 +6,6 @@ a.out
 .gitattributes
 
 #ignore dir
-*/build/*
+build/*
 /cry/*
 /.vscode/*
