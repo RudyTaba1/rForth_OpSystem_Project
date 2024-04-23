@@ -2,6 +2,7 @@
 #define INT_STACK_H
 
 #include <stdio.h>
+#include <search.h>
 #include <sys/queue.h>
 typedef struct int_entry {
     int value;
@@ -14,10 +15,15 @@ typedef struct int_stack {
     int capacity;
 } int_stack_t;
 
-typedef struct {
+typedef struct var_store {
     int value;
     char *key;
 } var_store;
+
+typedef struct _word_table{
+    struct hsearch_data wtable;
+    int size;
+}wordtable;
 
 
 extern void int_stack_init(int_stack_t *stk, int capacity);
