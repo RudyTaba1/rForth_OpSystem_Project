@@ -6,6 +6,8 @@
 #include <stdio.h>
 #include <sys/queue.h>
 
+
+
 void int_stack_init(int_stack_t *stk, int capacity) {
     SLIST_INIT(&stk->head);
     stk->size = 0;
@@ -371,6 +373,39 @@ int int_bool_invert(int_stack_t *stk){
     return int_stack_push(stk, invert);
 
 }
+void int_var_init(var_store *store, int cap){
+    for(int i = 0; i < cap; i++){
+        store[i].key = NULL;
+        store[i].value = 0;
+    }
+}
 
+void int_var_store(var_store *store, char *key, int value){
 
+    for(int i = 0; i < 10; i++){
+        if(store[i].key == NULL){
+            store[i].key = strdup(key);
+            store[i].value = value;
+            
+        }
+    }
+    
+}
 
+int int_isVar(var_store *store, char *key){
+    for(int i = 0; i < 10; i++){
+        if(store[i].key != NULL && strcmp(store[i].key, key) == 0){
+            return EXIT_SUCCESS;
+        }
+    }
+    return EXIT_FAILURE;
+}
+
+int int_pushVar(int_stack_t *stk, var_store *store, char *key){
+    for(int i = 0; i < 10; i++){
+        if(store[i].key != NULL && strcmp(store[i].key, key) == 0){
+            return int_stack_push(stk, store[i].value);
+        }
+    }
+    return EXIT_FAILURE;
+}

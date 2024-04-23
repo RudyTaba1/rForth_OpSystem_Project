@@ -12,6 +12,7 @@ enum token_type_t{
 	WORDS,
 	BOOLEAN,
 	LOOPS,
+	VARS
   }TOKEN_TYPE;
 
 //Token Structure

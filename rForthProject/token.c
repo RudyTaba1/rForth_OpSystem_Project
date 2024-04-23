@@ -2,7 +2,17 @@
 #include <string.h>
 #include "token.h"
 #include "int_stack.c"
-//comment test
+//capacity of varstore
+const int capacity = 100;
+//stores the variables
+var_store* VarStorage;
+
+void init_hm(){
+	var_store* VarStorage = malloc(capacity * sizeof(var_store));
+	int_var_init(VarStorage, capacity);
+}
+
+
 /**
  * method inputs a String and removes the spaces
  * @return the token without spaces
@@ -57,8 +67,12 @@ TOKEN parseToken(char *token){
 		}
 	   	else if(*token=='>'||*token=='<'||strcmp(token, "and")==0||strcmp(token, "or")==0||strcmp(token, "invert")==0||*token == '='){
 		   parsedToken.TokenType = BOOLEAN;
-	   }
+		}
+		else if(int_isVar(VarStorage, *token)==EXIT_SUCCESS){
+			parsedToken.TokenType = VARS;
+		}  
        else{
+
 	       parsedToken.TokenType = WORDS;
        }
 	//assigns the token to the parsedToken
@@ -74,11 +88,13 @@ return parsedToken;
  * 
 */
 void separate_token(int_stack_t *stk, char *txt, char* sList[], int sListVal[]){
+	
 	const char *space = " ";
 	char *token;
 	char *rest = txt;
 	int top_stk;
 	enum token_type_t TokenType;
+	
 	
 	//this while loop will identify the operation via symbole and then do the operation
 	while ((token = strtok_r(rest, space, &rest))){
@@ -138,7 +154,11 @@ void separate_token(int_stack_t *stk, char *txt, char* sList[], int sListVal[]){
 				}
 				else if(strcmp(token, "var")==0){
 					token = strtok_r(NULL, space, &rest);
+					init_hm();
 					if(token != NULL){
+					int_var_store(VarStorage, token, int_stack_pop(stk, &top_stk));
+					}
+					/*if(token != NULL){
 						for(int i = 0; i < 10; i++){
 							if(sList[i] == NULL){
 								sList[i] = strdup(token);
@@ -155,7 +175,7 @@ void separate_token(int_stack_t *stk, char *txt, char* sList[], int sListVal[]){
 							}
 					
 						}
-					}
+					}*/
 				}
 				else{
 					printf("Stack Underflow\n");
@@ -186,6 +206,9 @@ void separate_token(int_stack_t *stk, char *txt, char* sList[], int sListVal[]){
 					int_stack_pop(stk, &top_stk);
 					
 				}
+				break;
+			case VARS:
+				int_pushVar(stk, VarStorage, token);
 				break;
 			default:
 				break;

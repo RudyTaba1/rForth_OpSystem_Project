@@ -14,6 +14,12 @@ typedef struct int_stack {
     int capacity;
 } int_stack_t;
 
+typedef struct {
+    int value;
+    char *key;
+} var_store;
+
+
 extern void int_stack_init(int_stack_t *stk, int capacity);
 extern int int_stack_push(int_stack_t *stk, int value);
 extern int int_stack_pop(int_stack_t *stk, int *top_value);
@@ -40,6 +46,16 @@ extern int int_bool_greater(int_stack_t *stk);
 extern int int_bool_equal(int_stack_t *stk);
 extern int int_bool_or(int_stack_t *stk);
 extern int int_bool_invert(int_stack_t *stk);
+//hashmap functions.
+//initializes the hashmap
+extern void int_var_init(var_store *store, int cap);
+//stores variable with val in hm
+extern void int_var_store(var_store *store, char *key, int value);
+//checks to see if key is in hm
+extern int int_isVar(var_store *store, char *key);
+//pushes the value of key to the stack
+extern int int_pushVar(int_stack_t *stk, var_store *store, char *key);
+
 
 extern void separate_token(int_stack_t *stk, char *line, char *sList[], int sValues[]);
 

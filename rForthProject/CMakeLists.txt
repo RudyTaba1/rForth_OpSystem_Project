@@ -31,7 +31,7 @@ target_link_libraries(
 include(GoogleTest)
 gtest_discover_tests(int_stack_tests)
 
-add_executable(MainForth main.c)
+#add_executable(MainForth main.c)
 #add_executable(TokenForth token.c) #doesn't have a main method
-add_executable(TestTokenForth TestToken.c)
+#add_executable(TestTokenForth TestToken.c)
 add_executable(rForthInterpreter rLoop.c)
