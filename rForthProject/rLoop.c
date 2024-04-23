@@ -30,7 +30,7 @@ for(int i = 0; i<100; i++){
     sValues[i] = 0;
 }
 
-init_hm();
+
 
 /**
  * From here, I will attempt to build the for loop that houses the interpreter. I don't really know how to go about it, but I'll give it a shot.

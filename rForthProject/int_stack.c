@@ -380,16 +380,20 @@ void int_var_init(var_store *store, int cap){
     }
 }
 
-void int_var_store(var_store *store, char *key, int value){
+void int_var_store(var_store *store, int size, char *key, int value){
+    if (store == NULL || key == NULL) {
+        int_var_init(store, size);
+        //fprintf(stderr, "Null pointer error\n");
+        //return;
+    }
 
-    for(int i = 0; i < 10; i++){
+    for(int i = 0; i < size; i++){
         if(store[i].key == NULL){
             store[i].key = strdup(key);
             store[i].value = value;
-            
+            break;
         }
     }
-    
 }
 
 int int_isVar(var_store *store, char *key){

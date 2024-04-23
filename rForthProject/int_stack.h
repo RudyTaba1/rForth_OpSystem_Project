@@ -50,7 +50,7 @@ extern int int_bool_invert(int_stack_t *stk);
 //initializes the hashmap
 extern void int_var_init(var_store *store, int cap);
 //stores variable with val in hm
-extern void int_var_store(var_store *store, char *key, int value);
+extern void  int_var_store(var_store *store, int size, char *key, int value);
 //checks to see if key is in hm
 extern int int_isVar(var_store *store, char *key);
 //pushes the value of key to the stack

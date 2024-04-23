@@ -50,7 +50,7 @@ char *toString(enum token_type_t TokenType){
  * @return @param parsedToken.
 */
 TOKEN parseToken(char *token){
-
+	init_hm();
    TOKEN parsedToken;
 //checks if token is any of the structures
 	if(*token=='+'||*token=='-'||*token=='*'||*token=='/'|| *token=='.'){
@@ -68,9 +68,9 @@ TOKEN parseToken(char *token){
 	   	else if(*token=='>'||*token=='<'||strcmp(token, "and")==0||strcmp(token, "or")==0||strcmp(token, "invert")==0||*token == '='){
 		   parsedToken.TokenType = BOOLEAN;
 		}
-		else if(int_isVar(VarStorage, *token)==EXIT_SUCCESS){
+		/*else if(int_isVar(VarStorage, *token)==EXIT_SUCCESS){
 			parsedToken.TokenType = VARS;
-		}  
+		} */ 
        else{
 
 	       parsedToken.TokenType = WORDS;
@@ -154,9 +154,10 @@ void separate_token(int_stack_t *stk, char *txt, char* sList[], int sListVal[]){
 				}
 				else if(strcmp(token, "var")==0){
 					token = strtok_r(NULL, space, &rest);
-					init_hm();
+					
 					if(token != NULL){
-					int_var_store(VarStorage, token, int_stack_pop(stk, &top_stk));
+					int val = int_stack_pop(stk, &top_stk);
+					int_var_store(VarStorage, capacity, token, val);
 					}
 					/*if(token != NULL){
 						for(int i = 0; i < 10; i++){
