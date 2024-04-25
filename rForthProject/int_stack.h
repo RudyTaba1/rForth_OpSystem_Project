@@ -2,8 +2,12 @@
 #define INT_STACK_H
 
 #include <stdio.h>
-#include <search.h>
 #include <sys/queue.h>
+
+#define __USE_GNU
+#define _GNU_SOURCE
+
+#include <search.h>
 typedef struct int_entry {
     int value;
     SLIST_ENTRY(int_entry) entries;
@@ -21,8 +25,9 @@ typedef struct var_store {
 } var_store;
 
 typedef struct _word_table{
+    
     struct hsearch_data wtable;
-    int size;
+    int values;
 }wordtable;
 
 
@@ -54,9 +59,9 @@ extern int int_bool_or(int_stack_t *stk);
 extern int int_bool_invert(int_stack_t *stk);
 //hashmap functions.
 //initializes the hashmap
-extern void int_var_init(var_store *store, int cap);
+extern void int_var_init(wordtable *store, int cap);
 //stores variable with val in hm
-extern void  int_var_store(var_store *store, int size, char *key, int value);
+extern void  int_var_store(wordtable *store, int size, char *key, int value);
 //checks to see if key is in hm
 extern int int_isVar(var_store *store, char *key);
 //pushes the value of key to the stack
