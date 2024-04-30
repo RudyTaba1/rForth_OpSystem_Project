@@ -1,16 +1,13 @@
 #include <ctype.h>
 #include <string.h>
+//#include <search.h>
 #include "token.h"
 #include "int_stack.c"
 //capacity of varstore
 const int capacity = 100;
 //stores the variables
-var_store* VarStorage;
+wordtable* VarStorage;
 
-void init_hm(){
-	var_store* VarStorage = malloc(capacity * sizeof(var_store));
-	int_var_init(VarStorage, capacity);
-}
 
 
 /**
@@ -50,8 +47,18 @@ char *toString(enum token_type_t TokenType){
  * @return @param parsedToken.
 */
 TOKEN parseToken(char *token){
-	init_hm();
+	
    TOKEN parsedToken;
+
+   if(VarStorage == NULL){
+	   VarStorage = malloc(sizeof(wordtable));
+	   if(VarStorage==NULL){
+		   printf("Memory Allocation Error\n");
+		   exit(EXIT_FAILURE);
+	   }
+	   int_var_init(VarStorage, capacity);
+   }
+
 //checks if token is any of the structures
 	if(*token=='+'||*token=='-'||*token=='*'||*token=='/'|| *token=='.'){
        	parsedToken.TokenType = AR_OP;
@@ -68,9 +75,9 @@ TOKEN parseToken(char *token){
 	   	else if(*token=='>'||*token=='<'||strcmp(token, "and")==0||strcmp(token, "or")==0||strcmp(token, "invert")==0||*token == '='){
 		   parsedToken.TokenType = BOOLEAN;
 		}
-		/*else if(int_isVar(VarStorage, *token)==EXIT_SUCCESS){
+		else if(int_searchVar(VarStorage, token)!=NULL){
 			parsedToken.TokenType = VARS;
-		} */ 
+		} 
        else{
 
 	       parsedToken.TokenType = WORDS;
@@ -94,6 +101,8 @@ void separate_token(int_stack_t *stk, char *txt, char* sList[], int sListVal[]){
 	char *rest = txt;
 	int top_stk;
 	enum token_type_t TokenType;
+	//initialize the hashmap
+	//int_var_init(VarStorage, capacity);
 	
 	
 	//this while loop will identify the operation via symbole and then do the operation
@@ -153,11 +162,19 @@ void separate_token(int_stack_t *stk, char *txt, char* sList[], int sListVal[]){
 					int_stack_pop(stk, &top_stk);
 				}
 				else if(strcmp(token, "var")==0){
+					/*VarStorage = malloc(sizeof(wordtable));
+					if(VarStorage==NULL){
+						printf("Memory Allocation Error\n");
+						exit(EXIT_FAILURE);
+					}
+					int_var_init(VarStorage, capacity);*/
 					token = strtok_r(NULL, space, &rest);
-					
-					if(token != NULL){
+					if(token != NULL ){
 					int val = int_stack_pop(stk, &top_stk);
 					int_var_store(VarStorage, capacity, token, val);
+					}
+					else if(int_isVar(VarStorage, token)==EXIT_SUCCESS){
+						int_pushVar(stk, VarStorage, token);
 					}
 					/*if(token != NULL){
 						for(int i = 0; i < 10; i++){

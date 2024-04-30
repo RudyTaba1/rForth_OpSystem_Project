@@ -19,13 +19,13 @@ typedef struct int_stack {
     int capacity;
 } int_stack_t;
 
-typedef struct var_store {
+typedef struct wordentry {
     int value;
     char *key;
-} var_store;
+} wordentry;
 
 typedef struct _word_table{
-    
+    #include <search.h>
     struct hsearch_data wtable;
     int values;
 }wordtable;
@@ -61,11 +61,13 @@ extern int int_bool_invert(int_stack_t *stk);
 //initializes the hashmap
 extern void int_var_init(wordtable *store, int cap);
 //stores variable with val in hm
-extern void  int_var_store(wordtable *store, int size, char *key, int value);
+extern wordentry*  int_var_store(wordtable *store, int size, char *key, int value);
 //checks to see if key is in hm
-extern int int_isVar(var_store *store, char *key);
+extern int int_isVar(wordtable *store, char *key);
 //pushes the value of key to the stack
-extern int int_pushVar(int_stack_t *stk, var_store *store, char *key);
+extern int int_pushVar(int_stack_t *stk, wordtable *store, char *key);
+//different search function defined as wordentry
+extern wordentry* int_searchVar(wordtable *store, char *key);
 
 
 extern void separate_token(int_stack_t *stk, char *line, char *sList[], int sValues[]);

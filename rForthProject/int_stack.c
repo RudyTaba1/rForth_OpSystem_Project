@@ -4,6 +4,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <search.h>
 #include <sys/queue.h>
 
 
@@ -373,43 +374,71 @@ int int_bool_invert(int_stack_t *stk){
     return int_stack_push(stk, invert);
 
 }
-void int_var_init(var_store *store, int cap){
-    for(int i = 0; i < cap; i++){
-        store[i].key = NULL;
-        store[i].value = 0;
-    }
+void int_var_init(wordtable *store, int size){
+    hcreate_r(size, &store->wtable); 
+    store->values = size;
 }
 
-void int_var_store(var_store *store, int size, char *key, int value){
-    if (store == NULL || key == NULL) {
-        int_var_init(store, size);
+wordentry* int_var_store(wordtable *store, int size, char *key, int value){
+    wordentry *wp = int_searchVar(store, key);
+    //if (store == NULL || key == NULL) {
+        //int_var_init(store, size);
         //fprintf(stderr, "Null pointer error\n");
         //return;
+    //}
+    if(wp != NULL){
+        wp->value = value;
+        return wp;
     }
-
-    for(int i = 0; i < size; i++){
-        if(store[i].key == NULL){
-            store[i].key = strdup(key);
-            store[i].value = value;
-            break;
-        }
-    }
+    else{
+    ENTRY e, *ep;
+    wordentry *new = (wordentry *)malloc(sizeof(wordentry));
+    new->key = key;
+    new->value = value;
+    e.key = key;
+    e.data = (void *)new;
+    hsearch_r(e, ENTER, &ep, &store->wtable);
+    return ep == NULL ? NULL : (wordentry *) new;
+}
+   
 }
 
-int int_isVar(var_store *store, char *key){
-    for(int i = 0; i < 10; i++){
-        if(store[i].key != NULL && strcmp(store[i].key, key) == 0){
+/**
+ * This function searches the hashmap for a key.
+*/
+int hsearch_data(wordtable *store, char *key){
+    ENTRY e, *ep;
+    e.key = key;
+    hsearch_r(e, FIND, &ep, &store->wtable);
+    return ep ? EXIT_SUCCESS : EXIT_FAILURE;
+}
+
+int int_isVar(wordtable *store, char *key){
+    if(hsearch_data(store, key) != NULL){
             return EXIT_SUCCESS;
         }
+
+    return EXIT_FAILURE;
+}
+
+int int_pushVar(int_stack_t *stk, wordtable *store, char *key){
+    wordentry *entry = int_searchVar(store, key);
+    if(entry != NULL){
+        int val = entry->value;
+        printf("Pushing variable %s with value %d onto the stack\n", key, val);
+        return int_stack_push(stk, val);
+    }
+    else{
+        fprintf(stderr, "Variable not found\n");
     }
     return EXIT_FAILURE;
 }
 
-int int_pushVar(int_stack_t *stk, var_store *store, char *key){
-    for(int i = 0; i < 10; i++){
-        if(store[i].key != NULL && strcmp(store[i].key, key) == 0){
-            return int_stack_push(stk, store[i].value);
-        }
-    }
-    return EXIT_FAILURE;
+wordentry* int_searchVar(wordtable* store, char* key){
+	ENTRY e, *ep;
+	e.key  = key;
+	hsearch_r(e, FIND, &ep, &store->wtable);
+	return ep ? (wordentry *) ep->data : NULL;
 }
+
+
