@@ -70,7 +70,7 @@ Functionality and Rudy will be in charge of Loop and Interpreter Functionality.
 ```
 5) When compiled run the rForthInterpreter
 ```bash
-  .build/bin/rForthInterpreter
+  ./build/bin/rForthInterpreter
 ```
 
 ## Authors
