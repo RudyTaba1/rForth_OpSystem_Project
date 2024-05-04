@@ -230,6 +230,7 @@ int int_stack_2swap(int_stack_t *stk){
 /**
  * This takes the top two elements of the stack, and pushes the second element to the top of the stack.
 */
+
 int int_stack_2dup(int_stack_t *stk){
     if(stk->size < 2){
         return EXIT_SUCCESS;
@@ -320,9 +321,9 @@ int int_bool_less(int_stack_t *stk){
     
         int_stack_pop(stk, &top_value);
         int_stack_pop(stk, &second_val);
-        int or = second_val < top_value;
+        int less = second_val < top_value;
     
-    return int_stack_push(stk, or);
+    return int_stack_push(stk, less);
     }
 
 
@@ -381,11 +382,7 @@ void int_var_init(wordtable *store, int size){
 
 wordentry* int_var_store(wordtable *store, int size, char *key, int value){
     wordentry *wp = int_searchVar(store, key);
-    //if (store == NULL || key == NULL) {
-        //int_var_init(store, size);
-        //fprintf(stderr, "Null pointer error\n");
-        //return;
-    //}
+
     if(wp != NULL){
         wp->value = value;
         return wp;
