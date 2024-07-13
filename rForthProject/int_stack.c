@@ -5,7 +5,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <search.h>
+#include <stdbool.h>
 #include <sys/queue.h>
+
 
 
 
@@ -379,7 +381,14 @@ void int_var_init(wordtable *store, int size){
     hcreate_r(size, &store->wtable); 
     store->values = size;
 }
-
+/**
+ * function stores and searches for the value of the word in the hashtable.
+ * For example, if the word 'foo' is associated with the value 10, it will check to see if this value exists.
+ * 
+ * If the variable does not exist, then this method will insert the value and variable in the word table.
+ * 
+ * @return 0 (@param ep) if new value is stored, if not return the value of the queried variable
+ */
 wordentry* int_var_store(wordtable *store, int size, char *key, int value){
     wordentry *wp = int_searchVar(store, key);
 
@@ -394,6 +403,12 @@ wordentry* int_var_store(wordtable *store, int size, char *key, int value){
     new->value = value;
     e.key = key;
     e.data = (void *)new;
+    
+    //line 406 thru 407 are the problem, I believe. 
+    //For whatever reason, the search.h inclusion is not pulling all of the functions from the search library
+    //as a result, when storing, it stores whatever variable with a value of 1 and pushes that to the stack
+    
+    //will continue to troubleshoot. Potentially remake the hsearch_r function in my header, we'll see.
     hsearch_r(e, ENTER, &ep, &store->wtable);
     return ep == NULL ? NULL : (wordentry *) new;
 }
@@ -410,12 +425,15 @@ int hsearch_data(wordtable *store, char *key){
     return ep ? EXIT_SUCCESS : EXIT_FAILURE;
 }
 
+/**
+ * accessor function for hsearch_data.
+ */
 int int_isVar(wordtable *store, char *key){
     if(hsearch_data(store, key) != NULL){
-            return EXIT_SUCCESS;
+            return true;
         }
 
-    return EXIT_FAILURE;
+    return false;
 }
 
 int int_pushVar(int_stack_t *stk, wordtable *store, char *key){
@@ -428,7 +446,7 @@ int int_pushVar(int_stack_t *stk, wordtable *store, char *key){
     else{
         fprintf(stderr, "Variable not found\n");
     }
-    return EXIT_FAILURE;
+    return false;
 }
 
 wordentry* int_searchVar(wordtable* store, char* key){

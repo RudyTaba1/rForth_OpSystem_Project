@@ -25,7 +25,6 @@ typedef struct wordentry {
 } wordentry;
 
 typedef struct _word_table{
-    #include <search.h>
     struct hsearch_data wtable;
     int values;
 }wordtable;
